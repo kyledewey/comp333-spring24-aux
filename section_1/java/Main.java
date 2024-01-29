@@ -15,20 +15,18 @@ public class Main {
         }
     }
 
-    public static void write(Writer destination, String thing) {
-        if (destination != null) {
-            destination.println(thing);
-        } else {
-            System.out.println(thing);
-        }
+    // returns IPAddress - network location to write to
+    // OR returns null - not writing to a network location
+    public static IPAddress networkLocationToWriteTo(String[] args) {
+        // ...
     }
     
-    public static int doCalculation(Writer destination) {
+    public static int doCalculation(Destination destination) {
         // Magic
         int retval = 0;
         for (int x = 0; x < 10000; x++) {
             if (x % 1000 == 0) {
-                write(destination, "Still running");
+                destination.write("Still running");
             }
             retval = (retval + 1) * 2;
         }
@@ -40,15 +38,17 @@ public class Main {
     public static void main(String[] args) {
         // fileToWriteTo returns null if we should write to the terminal
         // otherwise it returns the name of the file to write to
-        String filename = fileToWriteTo(args);
-        Writer destination = null;
-        if (filename != null) {
-            destination = new BufferedWriter(new FileWriter(filename));
-        }
+        // String filename = fileToWriteTo(args);
+        // IpAddress networkLocation = networkLocationToWriteTo(args);
+        // Writer destination = null;
+        // if (filename != null) {
+        //     destination = new BufferedWriter(new FileWriter(filename));
+        // }
+        //
+        // SOMEHOW: a destination is made
+        Destination destination = new Destination(...);
         int result = doCalculation(destination);
-        write(destination, Integer.toString(result));
-        if (writer != null) {
-            destination.close();
-        }
+        destination.write(Integer.toString(result));
+        destination.close();
     }
 }
