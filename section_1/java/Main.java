@@ -46,8 +46,23 @@ public class Main {
         // }
         //
         // SOMEHOW: a destination is made
-        Destination destination = new Destination(...);
+        Destination destination = null;
+        if (shouldWriteToTerminal(args)) {
+            // subtyping polymorphism: Destination = TerminalDestination
+            destination = new TerminalDestination();
+        } else if (shouldWriteToFile(args)) {
+            // subtyping polymorphism: Destination = FileDestination
+            destination = new FileDestination(getFile(args));
+        } else if (shouldWriteToNetwork(args)) {
+            // subtyping polymorphism: Destination = NetworkDestination
+            destination = new NetworkDestination(getNetworkLocation(args));
+        } else if (shouldWriteToDatabase(args)) {
+            // subtyping polymorphism: Destination = DatabaseDestination
+            destination = new DatabaseDestination(getDatabase(args));
+        }
         int result = doCalculation(destination);
+        // Determining which write method is called: virtual dispatch
+        // this is ad-hoc polymorphism
         destination.write(Integer.toString(result));
         destination.close();
     }

@@ -1,29 +1,23 @@
-public class Destination {
-    public final Writer fileDestination;
-    public final NetworkSocket networkDestination;
-    public final DatabaseHandle databaseDestination;
+// struct Destination {
+//   Writer fileDestination;
+//   NetworkSocket networkDestination;
+//   DatabaseHandle databaseDestination;
+// };
+//
+// void write(struct Destination* dest, char* thingToWrite);
+//
+//
+// write(destination, "foo");
+//
+// destination.write("foo");
 
-    public Destination(final Writer fileDestination,
-                       final NetworkSocket networkDestination,
-                       final DatabaseHandle databaseDestination) {
-        this.fileDestination = fileDestination;
-        this.networkDestination = networkDestination;
-        this.databaseDestination = databaseDestination;
-    }
+//
+// int add(int x, int y); // prototype
+//
+// int add2(int x, int y) { return add(x, y); }
+// int add(int x, int y) { return x + y; }
 
-    public void write(String thing) {
-        if (fileDestination != null) {
-            fileDestination.println(thing);
-        } else if (networkDestination != null) {
-            networkDestination.send(thing);
-        } else if (databaseDestination != null) {
-            databaseDestination.putIntoTable(thing);
-        } else {
-            System.out.println(thing);
-        }
-    }
-
-    public static void close() {
-        // TODO: look at what we actually are, then close the right thing
-    }
+public interface Destination {
+    public void write(String thing);
+    public void close();
 }
