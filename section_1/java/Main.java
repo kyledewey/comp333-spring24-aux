@@ -34,7 +34,11 @@ public class Main {
         return retval;
     }
 
-       
+    // Big things:
+    // 1.) Ad-hoc polymorphism / virtual dispatch / dynamic dispatch
+    //     The actual method called is determined at runtime
+    // 2.) Subtyping polymorphism - specializations of a type can be
+    //     substituted for the actual expected type
     public static void main(String[] args) {
         // fileToWriteTo returns null if we should write to the terminal
         // otherwise it returns the name of the file to write to
@@ -49,6 +53,11 @@ public class Main {
         Destination destination = null;
         if (shouldWriteToTerminal(args)) {
             // subtyping polymorphism: Destination = TerminalDestination
+
+            // Destination d = new TerminalDestination();
+            // TerminalDestination t = new TerminalDestination();
+            //
+            // t.getClass().equals(d.getClass()) // true
             destination = new TerminalDestination();
         } else if (shouldWriteToFile(args)) {
             // subtyping polymorphism: Destination = FileDestination
