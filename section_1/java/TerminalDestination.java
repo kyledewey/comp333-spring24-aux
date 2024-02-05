@@ -6,4 +6,8 @@ public class TerminalDestination implements Destination {
     }
 
     public void close() {}
+
+    public String toString() {
+        return "foo";
+    }
 }

@@ -12,46 +12,34 @@ public class Main {
     // if we don't write to an IPAddress
     public static IPAddress getNetworkLocation(String[] args) { ... }
     
-    public static void write(FileWriter writer,
-                             NetworkSocket socket,
-                             String thingToWrite) {
-        if (writer != null) {
-            writer.println(thingToWrite);
-        } else if (socket != null) {
-            socket.send(thingToWrite);
-        } else {
-            System.out.println(thingToWrite);
-        }
-    }
-
-    public static int doComputation(FileWriter writer,
-                                    NetworkSocket socket) {
+    public static int doComputation(Destination destination) {
         int retval = 0;
         for (int x = 1; x < 500; x++) {
             retval = x * 5 + retval;
             if (x % 100 == 0) {
-                write(writer, socket, "Working");
+                destination.write("Working");
             }
         }
         return retval;
     }
-    
+
+    // FOR MONDAY: subtyping
     public static void main(String[] args) {
         String filename = getFileName(args);
         IPAddress address = getNetworkLocation(args);
-        FileWriter writer = null;
-        NetworkSocket socket = null;
+        Destination destination = null;
         if (filename != null) {
-            writer = new BufferedWriter(new FileWriter(filename));
+            // subtyping polymorphism
+            destination = new FileDestination(new FileWriter(filename));
         } else if (address != null) {
-            socket = new NetworkSocket(address);
+            destination = new NetworkDestination(new NetworkSocket(address));
+        } else {
+            destination = new TerminalDestination();
         }
-        int result = doComputation(writer, socket);
-        write(writer, socket, result);
-        if (filename != null) {
-            writer.close();
-        } else if (socket != null) {
-            socket.close();
-        }
+        int result = doComputation(destination);
+        // ad-hoc polymorphism: the actual write method called is determined
+        // at runtime: O(1)
+        destination.write(result);
+        destination.close();
     }
 }
