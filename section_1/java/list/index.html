@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Assignment 1: Class-based Inheritance and Virtual Dispatch in Java</title>
+  </head>
+
+  <body>
+    <h1>Assignment 1: Class-based Inheritance and Virtual Dispatch in Java</h1>
+    <hr>
+    <p>Due Friday, March 8 at 11:59 PM</b></p>
+
+    <h2>Goals for This Assignment</h2>
+    <p>By the time you have completed this work, you should be able to:</p>
+    <ul>
+      <li>Use class-based inheritance to implement different behaviors for the same method</li>
+      <li>Implement an immutable list</li>
+      <li>Use recursion to implement basic list operations</li>
+    </ul>
+    <b>Provided files:</b>
+    <ul>
+      <li><a href="ImmutableList.java"><code>ImmutableList.java</code></a></li>
+      <li><a href="ImmutableListTest.java"><code>ImmutableListTest.java</code></a></li>
+      <li><a href="Cons.java"><code>Cons.java</code></a></li>
+      <li><a href="Nil.java"><code>Nil.java</code></a></li>
+      <li><a href="hamcrest-2.2.jar"><code>hamcrest-2.2.jar</code></a></li>
+      <li><a href="junit-4.13.jar"><code>junit-4.13.jar</code></a></li>
+    </ul>
+
+    <h1>Step-by-Step Instructions</h1>
+
+    <h2>Step 1: Download Needed Code</h2>
+    <p>
+      Download everything from the links above into a single directory.
+    </p>
+
+    <h2>Step 2: Read and Understand Provided Code</h2>
+    <p>
+      For this assignment, you'll be working with an <b>immutable</b> linked list implementation, a type of <a href="https://en.wikipedia.org/wiki/Persistent_data_structure">persistent data structure</a>.
+      While you (hopefully!) are familiar with linked lists, this implementation is likely very different from the one you're used to.
+      Notably:
+    </p>
+    <ul>
+      <li>
+        Existing lists cannot be modified (the immutable/persistant part).
+        Operations which would normally modify the list (like <code>append</code>) instead return a <i>new</i> list, reflecting the result of the operation.
+        For example, <code>[1, 2].append([3, 4, 5])</code> returns the list <code>[1, 2, 3, 4, 5]</code>, leaving the original lists <code>[1, 2]</code> and <code>[3, 4, 5]</code> unmodified.
+      </li>
+      <li>
+        Instead of using <code>null</code> to represent the end of a list, we instead use an instance of class <code>Nil</code>.
+      </li>
+      <li>
+        Class <code>Cons</code> corresponds to the normal <code>Node</code> class, with the caveat that <code>tail</code> (representing the rest of the list) cannot be <code>null</code>.
+        Per the prior bullet, if we want to represent a list where <code>tail</code> is empty, then we should have an instance of <code>Nil</code> there.
+      </li>
+      <li>
+        There is no special class holding the head of a list.
+        Instead, <code>Cons</code> and <code>Nil</code> are both fully-featured lists in and of themselves.
+        This is one of the reasons we use <code>Nil</code> instead of <code>null</code>, as we can meaningfully call methods on <code>Nil</code> (unlike <code>null</code>).
+      </li>
+      <li>
+        <code>Cons</code> and <code>Nil</code> both implement the <code>ImmutableList</code> interface.
+        If something wants to take a list as a parameter, it should take an <code>ImmutableList</code>; which could be either an empty list (<code>Nil</code>) or a non-empty list (<code>Cons</code>).
+      </li>
+    </ul>
+
+    <p>
+      In addition to the above bullets, there is a provided <a href="https://junit.org/junit4/">JUnit 4</a> test suite in <code>ImmutableListTest.java</code>.
+    </p>
+
+    <h2>Step 3: (Try to) Compile and Run the Tests</h2>
+    <p>
+      You will need to compile and run the code.
+      If the code fails to compile, do not try to run it; it either won't work, or you'll run an old, previously-compiled version.
+      The two commands below compile and run the code, respectively.
+      The two commands are slightly different, depending on what system you're running with.
+      If you're on a <b>UNIX-based system (e.g., Mac OS X, Linux)</b>, use:
+    </p>
+<pre>
+javac -cp .:hamcrest-2.2.jar:junit-4.13.jar -Xlint:all ImmutableList.java Cons.java Nil.java ImmutableListTest.java
+java -cp .:hamcrest-2.2.jar:junit-4.13.jar org.junit.runner.JUnitCore ImmutableListTest
+</pre>
+    <p>
+      If you're on <b>Windows command prompt</b>, use these two commands, which use semicolons instead of colons:
+    </p>
+<pre>
+javac -cp .;hamcrest-2.2.jar;junit-4.13.jar -Xlint:all ImmutableList.java Cons.java Nil.java ImmutableListTest.java
+java -cp .;hamcrest-2.2.jar;junit-4.13.jar org.junit.runner.JUnitCore ImmutableListTest
+</pre>
+    <p>
+      If you're on <b>Windows Powershell</b>, use these two commands, which put some arguments in single quotes:
+    </p>
+<pre>
+javac -cp '.;hamcrest-2.2.jar;junit-4.13.jar' -Xlint:all ImmutableList.java Cons.java Nil.java ImmutableListTest.java
+java -cp '.;hamcrest-2.2.jar;junit-4.13.jar' org.junit.runner.JUnitCore ImmutableListTest
+</pre>
+    <p>
+      If all tests are passing, you'll see output like the following:
+    </p>
+<pre>
+JUnit version 4.13
+....................................
+Time: 0.053
+
+OK (36 tests)
+</pre>
+    <p>
+      If tests are failing, the output will instead show which tests are failing.
+      From there, you can look to see what those tests are doing in the test suite (<code>ImmutableList.java</code>), which will inform you of what needs to be modified.
+    </p>
+    
+    <p>
+      Note that the provided code <b>will not compile as provided</b>.
+      It's missing the implementations of multiple methods which are needed to make the tests compile.
+    </p>
+
+    <h2>Step 4: Implement Missing Code, with Restrictions</h2>
+    <p>
+      Add code to <code>Cons.java</code> and <code>Nil.java</code> to get it to compile and pass the tests.
+      Specifically, you need to implement the following methods for each:
+    </p>
+    <ul>
+      <li>
+        <code>length</code>: returns the length of a list.
+        As a hint, empty lists (<code>Nil</code>) have length <code>0</code>.
+      </li>
+      <li>
+        <code>sum</code>: returns the sum of all the elements of the list.
+        For our purposes, empty lists (<code>Nil</code>) have a sum of <code>0</code>.
+      </li>
+      <li>
+        <code>append</code>: appends two lists together, returning a new list.
+      </li>
+      <li>
+        <code>contains</code>: returns <code>true</code> if the given list contains the given element, else <code>false</code>.
+      </li>
+    </ul>
+    <p>
+      Example calls to these methods are in <code>ImmutableList.java</code>.
+    </p>
+    <h3>Restrictions</h3>
+    <p>
+      For full credit, your code:
+    </p>
+    <ul>
+      <li>
+        Can only modify <code>Cons.java</code> and <code>Nil.java</code>; I'll only look at these two files when grading, so any other modifications will be ignored.
+      </li>
+      <li>
+        <b>CANNOT</b> use loops (no <code>for</code>, foreach, <code>while</code>, or <code>do-while</code>).
+        Any code I provided that uses loops is ok, and should not be modified.
+      </li>
+      <li>
+        <b>CANNOT</b> use conditionals (no <code>if</code>, <code>switch</code>, or ternary (<code>(...) ? ... : ...</code>)).
+        Any code I provided that uses loops is ok, and should not be modified.
+      </li>
+    </ul>
+    <p>
+      These restrictions will force you to use recursion for a correct solution, and will also force you to fully exploit <a href="https://en.wikipedia.org/wiki/Dynamic_dispatch">virtual dispatch</a> (also known as dynamic dispatch, polymorphism, and ad-hoc polymorphism).
+      While these restrictions will likely be annoying, it will force you to use a key object-oriented feature (virtual dispatch), as well as serve as good practice for later in the course (recursion).
+    </p>
+    <h3>Hints</h3>
+    <ul>
+      <li>
+        It's recommended to first write <a href="https://en.wikipedia.org/wiki/Method_stub">method stubs</a> for all the methods you need to implement.
+        This will get all the code compiling, but the tests won't pass.
+        This is still progress, and this way you can focus on getting one set of tests (or even just one test) to pass at a time.
+      </li>
+      <li>
+        Mentally, whenever you think something like:
+<pre>
+if (list is empty) {
+  do empty thing
+} else {
+  do non-empty thing
+}
+</pre>
+...you must instead use virtual dispatch.
+For this example, <code>do empty thing</code> would go into the corresponding method definition in <code>Nil</code>, and <code>do non-empty thing</code> would go into the corresponding method definition in <code>Cons</code>.
+      </li>
+      <li>
+        While you only have to implement 4 operations, each of these has a different implementation for <code>Cons</code> and <code>Nil</code>, so you really have to implement 8 methods.
+        That said, the body of each of these methods need only be <b>a single line of code</b>.
+        If you need much more than a single line for any method, you are likely making this more difficult than it needs to be.
+        If you're stuck, talk to me.
+      </li>
+      <li>
+        Once you think you have an operation working, run the tests again using the instructions in step 3.
+        It's probably best to focus on getting one set of tests (or even just one test) passing at a time.
+      </li>
+      <li>
+        Specific to <code>contains</code>, you do not need to use <code>if</code>, though you'll need to use the short-circuiting nature of <code>||</code>.
+        Specifically you can implement this using something like the following:
+<pre>
+  return head == value || &lt;&ltrecursive call&gt;&gt;;
+</pre>
+      </li>
+    </ul>
+
+    <h2>Step 5: Turn in Your Code Using <a href="https://canvas.csun.edu">Canvas</a></h2>
+    <p>
+      Log into <a href="https://canvas.csun.edu">Canvas</a>, and go to the COMP 333 class.
+      Click &ldquo;Assignments&rdquo; on the left pane, then click &ldquo;Assignment 1&rdquo;.
+      From here, you need to upload the following files:
+    </p>
+    <ul>
+      <li><code>Cons.java</code></li>
+      <li><code>Nil.java</code></li>
+    </ul>
+    <p>
+      In addition, if you collaborated with anyone else, be sure to download <a href="collaborators.txt"><code>collaborators.txt</code></a> and write the names of the people you collaborated with in the file, one per line.
+      Please submit this file along with the other files.
+    </p>
+    <p>
+      You can turn in the assignment multiple times, but only the last version you submitted will be graded.
+    </p>
+  </body>
+</html>
+
+
