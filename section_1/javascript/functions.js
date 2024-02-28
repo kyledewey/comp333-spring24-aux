@@ -1,30 +1,43 @@
-function printAll(arr) {
+// -higher-order functions
+// -anonymous functions
+// -lambda functions / lambdas
+// -closures
+// higher-order functions: functions are data
+function printSome(arr, condition) {
+    // condition: function that takes an element (int),
+    // returns a boolean (true if we want to print it)
     for (let index = 0; index < arr.length; index++) {
         let element = arr[index];
-        console.log(element); // prints something
+        if (condition(element)) { // calls condition
+            console.log(element); // prints something
+        }
     }
 }
 
-function add(x, y) {
-    return x + y;
+function printAll(arr) {
+    printSome(arr, (e) => true);
 }
 
 function printAllLessThan7(arr) {
-    for (let index = 0; index < arr.length; index++) {
-        let element = arr[index];
-        if (element < 7) {
-            console.log(element);
-        }
-    }
+    let f = (element) => element < 7;
+    printSome(arr, f); // ??
 }
 
 function printAllEvens(arr) {
-    for (let index = 0; index < arr.length; index++) {
-        let element = arr[index];
-        if (element % 2 === 0) {
-            console.log(element);
-        }
-    }
+    printSome(arr, (e) => e % 2 === 0);
 }
 
-// FOR NEXT TIME: remove code duplication
+function printAllOdds(a) {
+    let f = function (e) {
+        console.log("ELEMENT: " + e);
+        return e % 2 !== 0;
+    };
+    printSome(a, f);
+}
+
+function delayedAdd(x) {
+    return function (y) {
+        return x + y;
+    };
+}
+
