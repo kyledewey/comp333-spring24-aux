@@ -41,3 +41,68 @@ function delayedAdd(x) {
     };
 }
 
+function example(x) {
+    // return (x) => (y) => (z) => x + y + z;
+    // return (x) => ((y) => ((z) => x + y + z));
+    return function (y) {
+        return function (z) {
+            return x + y + z;
+        }
+    }
+}
+
+function callMe(foo) {
+    return foo();
+}
+
+// let callMe = (foo) => foo();
+
+function indirectIf(someBool, f1, f2) {
+    // (someBool) ? f1() : f2()
+    if (someBool) {
+        f1();
+    } else {
+        f2();
+    }
+}
+
+// let indirectIf =
+//     (someBool, f1, f2) => (someBool) ? f1() : f2();
+
+// if (condition) {
+//     executeThis();
+// } else {
+//     executeThat();
+// }
+
+// indirectIf(condition, executeThis, executeThat)
+
+// if (condition) {
+//     foo();
+//     bar();
+// } else {
+//     baz();
+//     blah();
+// }
+
+// indirectIf(condition,
+//            () => {
+//                foo();
+//                bar();
+//            },
+//            () => {
+//                baz();
+//                blah();
+//            })
+
+// def indirectWhile(fn1: () => Boolean, fn2: () => Unit): Unit = {
+//   
+function indirectWhile(fn1, fn2) {
+    let bool = fn1();
+    if (bool === true) {
+        fn2();
+        indirectWhile(fn1, fn2);
+    }
+}
+
+// FOR NEXT TIME: finish indirectWhile questions, #4
