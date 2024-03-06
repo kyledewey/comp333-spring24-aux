@@ -97,12 +97,47 @@ function indirectIf(someBool, f1, f2) {
 
 // def indirectWhile(fn1: () => Boolean, fn2: () => Unit): Unit = {
 //   
-function indirectWhile(fn1, fn2) {
-    let bool = fn1();
+function indirectWhile(condition, body) {
+    let bool = condition();
     if (bool === true) {
-        fn2();
-        indirectWhile(fn1, fn2);
+        body();
+        indirectWhile(condition, body);
     }
 }
 
-// FOR NEXT TIME: finish indirectWhile questions, #4
+// (x) => x
+returnParam = function (param) { return param; }
+// function returnParam(param) { return param; }
+
+// wrapAdd is a function
+//   -first parameter: function
+//     -Takes something
+//     -Returns same something
+//   -second parameter: integer
+//   -returns a function
+//     -Takes an integer
+//     -Returns an integer
+// let f = wrapAdd(returnParam, 5);
+// let x = f(2); // otherInteger = 2; x = 7; 7
+// let y = f(3); // otherInteger = 3; y = 8; 8
+
+// func: (A) -> A
+// integer: int
+// return value: (int) -> int
+function wrapAdd(func, integer) {
+    // otherInteger: int
+    return function (otherInteger) {
+        // weird: didn't use func
+        let add = integer + otherInteger;
+        return func(add);
+    }
+}
+
+let DEBUG_MODE = false;
+function debug(makeMessage) {
+    if (DEBUG_MODE) {
+        console.log(makeMessage());
+    }
+}
+
+debug(() => "DEBUG: " + someExpensiveOperation())

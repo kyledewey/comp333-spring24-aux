@@ -81,11 +81,35 @@ function indirectIf(bool, func1, func2) {
 
 // f1: (???) => bool
 // f2: (???) => undefined
-function indirectWhile(f1, f2) {
-    if (f1() == true) {
-        f2();
-        indirectWhile(f1, f2);
+function indirectWhile(condition, body) {
+    if (condition() == true) {
+        body();
+        indirectWhile(condition, body);
     }
 }
 
-// NEXT TIME: indirectWhile recap, #4 on handout
+function returnParam(param) { return param; }
+
+// wrapAdd is a function that takes two arguments
+//   -first argument: function
+//      -Takes one argument
+//      -Returns the passed argument
+//   -second argument: integer
+//   -returns a function:
+//      -Takes one argument: an integer
+//      -Returns an integer
+//
+// func wrapAdd(a: (A) -> A, b: int): (int) -> int
+
+// let f = wrapAdd(returnParam, 5);
+// let x = f(2); // x = 7
+// let y = f(3); // y = 8
+
+function wrapAdd(func, integer) {
+    return function (otherInteger) {
+        // doesn't use func
+        let add = integer + otherInteger;
+        return func(add);
+    }
+}
+    
