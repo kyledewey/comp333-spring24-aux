@@ -54,4 +54,38 @@ function delayedAdd(x) {
     };
 }
 
-    
+// function foo() {}
+
+// def callMe(foo: () => Unit): Unit = {
+//   foo()
+// }
+
+function foo() {
+    console.log("FOO CALLED");
+}
+
+function callMe(foo) {
+    return foo();
+}
+
+// let callMe = (foo) => foo();
+
+function indirectIf(bool, func1, func2) {
+    // (bool) ? func1() : func2();
+    if (bool === true) {
+        func1();
+    } else {
+        func2();
+    }
+}
+
+// f1: (???) => bool
+// f2: (???) => undefined
+function indirectWhile(f1, f2) {
+    if (f1() == true) {
+        f2();
+        indirectWhile(f1, f2);
+    }
+}
+
+// NEXT TIME: indirectWhile recap, #4 on handout
