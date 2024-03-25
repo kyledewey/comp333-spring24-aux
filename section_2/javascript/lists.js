@@ -1,3 +1,4 @@
+// operation: a function that takes one parameter
 function forEach(arr, operation) {
     for (let index = 0; index < arr.length; index++) {
         let elem = arr[index];
@@ -5,4 +6,39 @@ function forEach(arr, operation) {
     }
 }
 
-// FOR NEXT TIME: other operations (map, filter, reduce)
+// operation: function that:
+//    -Takes the current value of retval
+//    -Takes the current array element
+//    Returns the new value of retval
+// startValue: starting value of retval
+function reduce(arr, operation, startValue) {
+    // retval: accumulator
+    let retval = startValue;
+    for (let index = 0; index < arr.length; index++) {
+        let elem = arr[index];
+        retval = operation(retval, elem);
+    }
+    return retval;
+}
+
+function sum(arr) {
+    return reduce(arr, (retval, elem) => retval + elem, 0);
+    // let retval = 0;
+    // for (let index = 0; index < arr.length; index++) {
+    //     let elem = arr[index];
+    //     retval = retval + elem;
+    // }
+    // return retval;
+}
+
+function product(arr) {
+    return reduce(arr, (retval, elem) => retval * elem, 1);
+    // let retval = 1;
+    // for (let index = 0; index < arr.length; index++) {
+    //     let elem = arr[index];
+    //     retval = retval * elem;
+    // }
+    // return retval;
+}
+
+// FOR NEXT TIME: go over handout with reduce
