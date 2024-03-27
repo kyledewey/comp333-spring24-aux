@@ -41,4 +41,23 @@ function product(arr) {
     // return retval;
 }
 
-// FOR NEXT TIME: go over handout with reduce
+function min(x, y) {
+    if (x < y) {
+	return x;
+    } else {
+	return y;
+    }
+}
+
+function findMin(arr) {
+    let currentMin = 0;
+    for (let index = 0; index < arr.length; index++) {
+	let elem = arr[index];
+	if (elem < currentMin) {
+	    currentMin = elem;
+	} else {
+	    currentMin = currentMin;
+	}
+    }
+    return currentMin;
+}
